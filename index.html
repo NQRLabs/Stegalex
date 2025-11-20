@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    Stegalex - Classical Text Encryption & Decryption
+    MIT License
+
+    Copyright (c) 2025 NQR
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Transform text with classical encryption methods. A1Z26, Caesar, Vigenere, Base64 and more with independent styling controls.">
+  <title>Stegalex | NQR Labs</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Stegalex | NQR Labs">
+  <meta property="og:description" content="Transform text with classical encryption methods. A1Z26, Caesar, Vigenere, Base64 and more with independent styling controls.">
+  <meta property="og:image" content="https://nqrlabs.com/Stegalex/assets/images/logo.png">
+  <meta property="og:url" content="https://nqrlabs.com/Stegalex/">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Stegalex | NQR Labs">
+  <meta name="twitter:description" content="Transform text with classical encryption methods. A1Z26, Caesar, Vigenere, Base64 and more with independent styling controls.">
+  <meta name="twitter:image" content="https://nqrlabs.com/Stegalex/assets/images/logo.png">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://nqrlabs.com/Stegalex/">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+  <div class="container">
+    <!-- Control Panel -->
+    <div class="control-panel">
+      <!-- Method Selection & Parameters -->
+      <div class="section">
+        <div class="section-title">Cipher Method</div>
+
+        <div class="control-group">
+          <select id="cipherMethod">
+            <option value="a1z26">A1Z26 (A=1, B=2, ...)</option>
+            <option value="caesar">Caesar Shift</option>
+            <option value="vigenere">Vigenère Cipher</option>
+            <option value="base64">Base64</option>
+            <option value="rot13">ROT13</option>
+            <option value="atbash">Atbash</option>
+            <option value="binary">Binary</option>
+            <option value="hex">Hexadecimal</option>
+          </select>
+        </div>
+
+        <!-- Caesar Shift -->
+        <div class="parameter-group" data-method="caesar">
+          <div class="control-group">
+            <label class="control-label">Shift Amount</label>
+            <div class="range-container">
+              <input type="range" id="caesarShift" min="1" max="25" value="3">
+              <span class="range-value" id="caesarShiftValue">3</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vigenère -->
+        <div class="parameter-group" data-method="vigenere">
+          <div class="control-group">
+            <label class="control-label">Key</label>
+            <input type="text" id="vigenereKey" placeholder="Enter key..." value="KEY">
+            <div class="info-hint">Alphabetic key for encryption</div>
+          </div>
+        </div>
+
+        <!-- A1Z26 -->
+        <div class="parameter-group" data-method="a1z26">
+          <div class="control-group">
+            <label class="control-label">Separator</label>
+            <input type="text" id="a1z26Separator" placeholder="-" value="-" maxlength="3">
+            <div class="info-hint">Character(s) between numbers</div>
+          </div>
+        </div>
+
+        <!-- Binary -->
+        <div class="parameter-group" data-method="binary">
+          <div class="control-group">
+            <label class="control-label">
+              <input type="checkbox" id="binarySpaces" checked>
+              Add spaces between bytes
+            </label>
+          </div>
+        </div>
+
+        <!-- Hex -->
+        <div class="parameter-group" data-method="hex">
+          <div class="control-group">
+            <label class="control-label">
+              <input type="checkbox" id="hexUppercase" checked>
+              Uppercase
+            </label>
+          </div>
+          <div class="control-group">
+            <label class="control-label">
+              <input type="checkbox" id="hexSpaces" checked>
+              Add spaces between bytes
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cipher History -->
+      <div class="section history-section">
+        <button class="section-title collapsible" id="historyToggle">
+          Cipher History
+          <span class="collapse-icon">▼</span>
+        </button>
+        <div class="history-content" id="historyContent">
+          <div class="history-text" id="historyText">
+            <!-- Populated by JavaScript -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Header -->
+      <header>
+        <img src="assets/images/logo.png" alt="Stegalex Logo" onerror="this.style.display='none'" class="logo">
+        <h1>Stegalex</h1>
+        <p class="subtitle">Classical text encryption & decryption</p>
+      </header>
+
+      <!-- Footer -->
+      <footer class="panel-footer">
+        <a href="https://nqrlabs.com" target="_blank">NQR Labs</a> |
+        <a href="https://discord.gg/HT9YE8rvuN" target="_blank">Discord</a> |
+        <button type="button" id="licenseFooter" class="link-style">License</button>
+      </footer>
+    </div>
+
+    <!-- Input/Output Panels -->
+    <div class="main-content">
+      <!-- Plaintext Panel -->
+      <div class="text-panel plaintext-panel">
+        <div class="styling-controls">
+          <h2>Plaintext</h2>
+          <div class="styling-controls-body">
+            <select id="plaintextFont" class="font-select">
+              <option value="'Segoe UI', sans-serif">Segoe UI</option>
+              <option value="'Courier New', monospace">Courier New</option>
+              <option value="'Arial', sans-serif">Arial</option>
+              <option value="'Georgia', serif">Georgia</option>
+              <option value="'Comic Sans MS', cursive">Comic Sans</option>
+              <option value="'Consolas', monospace">Consolas</option>
+              <option value="custom">Custom Font...</option>
+            </select>
+
+            <input type="file" id="plaintextFontFile" accept=".ttf,.otf,.woff,.woff2" style="display: none;">
+
+            <input type="number" id="plaintextSize" min="12" max="72" value="16" class="size-input" title="Font size">
+
+            <input type="color" id="plaintextColor" value="#d7e8ff" class="color-input" title="Text color">
+
+            <input type="color" id="plaintextBgColor" value="#030508" class="color-input" title="Background color">
+
+            <button id="plaintextBold" class="style-btn" title="Bold">B</button>
+            <button id="plaintextItalic" class="style-btn" title="Italic">I</button>
+
+            <select id="plaintextAlign" class="align-select">
+              <option value="left">Left</option>
+              <option value="center">Center</option>
+              <option value="right">Right</option>
+            </select>
+
+            <button id="savePlaintextImage" class="icon-btn" title="Save as image">💾</button>
+          </div>
+        </div>
+
+        <textarea id="plaintextText"></textarea>
+      </div>
+
+      <!-- Ciphertext Panel -->
+      <div class="text-panel ciphertext-panel">
+        <div class="styling-controls">
+          <h2>Ciphertext</h2>
+          <div class="styling-controls-body">
+            <select id="ciphertextFont" class="font-select">
+              <option value="'Segoe UI', sans-serif">Segoe UI</option>
+              <option value="'Courier New', monospace" selected>Courier New</option>
+              <option value="'Arial', sans-serif">Arial</option>
+              <option value="'Georgia', serif">Georgia</option>
+              <option value="'Comic Sans MS', cursive">Comic Sans</option>
+              <option value="'Consolas', monospace">Consolas</option>
+              <option value="custom">Custom Font...</option>
+            </select>
+
+            <input type="file" id="ciphertextFontFile" accept=".ttf,.otf,.woff,.woff2" style="display: none;">
+
+            <input type="number" id="ciphertextSize" min="12" max="72" value="16" class="size-input" title="Font size">
+
+            <input type="color" id="ciphertextColor" value="#d7e8ff" class="color-input" title="Text color">
+
+            <input type="color" id="ciphertextBgColor" value="#030508" class="color-input" title="Background color">
+
+            <button id="ciphertextBold" class="style-btn" title="Bold">B</button>
+            <button id="ciphertextItalic" class="style-btn" title="Italic">I</button>
+
+            <select id="ciphertextAlign" class="align-select">
+              <option value="left">Left</option>
+              <option value="center">Center</option>
+              <option value="right">Right</option>
+            </select>
+
+            <button id="saveCiphertextImage" class="icon-btn" title="Save as image">💾</button>
+          </div>
+        </div>
+
+        <textarea id="ciphertextText"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- LICENSE MODAL -->
+  <div class="license-overlay" id="licenseOverlay"></div>
+  <div class="license-modal" id="licenseModal" role="dialog" aria-modal="true" aria-labelledby="licenseModalTitle">
+    <div class="license-modal-header">
+      <h2 class="license-modal-title" id="licenseModalTitle">Stegalex License</h2>
+      <button type="button" class="license-close" id="licenseClose" aria-label="Close license modal">×</button>
+    </div>
+    <div class="license-modal-text">Stegalex - MIT License
+
+Copyright (c) 2025 NQR
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
